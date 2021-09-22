@@ -62,7 +62,7 @@ router.post(
       );
     } catch (error) {
       console.error(error);
-      res.status(500).send("server error");
+      res.status(500).send("伺服器錯誤，請稍候再試");
     }
   }
 );
