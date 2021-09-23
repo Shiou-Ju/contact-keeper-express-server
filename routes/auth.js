@@ -16,7 +16,7 @@ router.get("/", verifyUserToken, async (req, res) => {
     const loggedInUser = await User.findById(req.user.id).select("-password");
     res.json(loggedInUser);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).send("伺服器錯誤");
   }
 });
