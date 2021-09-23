@@ -32,7 +32,7 @@ router.get("/", verifyUserToken, async (req, res) => {
 //@access   Private
 router.post(
   "/",
-  [[verifyUserToken,  check("name", "姓名為必填項目").not().isEmpty()]],
+  [[verifyUserToken, check("name", "姓名為必填項目").not().isEmpty()]],
   async (req, res) => {
     const errors = validationResult(req);
     if (errors.array().length) {
@@ -60,17 +60,61 @@ router.post(
 //@route    PUT api/contacts/:id
 //@desc     Update contact
 //@access   Private
-router.put(
-  "/:id",
-  [[check("name", "姓名為必填項目").not().isEmpty()], verifyUserToken],
-  (req, res) => {}
-);
+router.put("/:id", verifyUserToken, async (req, res) => {
+  const { name, email, phone, type } = req.body;
+  // build new contact obj
+  const contactFields = {};
+  if (name) contactFields.name = name;
+  if (email) contactFields.email = email;
+  if (phone) contactFields.phone = phone;
+  if (type) contactFields.type = type;
+
+  try {
+    let targetContact = await Contact.findById(req.params.id);
+
+    if (!targetContact) {
+      return res.status(404).json({ msg: "此ID沒有對應到的聯絡人項目" });
+    }
+
+    if (targetContact.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "沒有權限更改此聯絡人" });
+    }
+
+    targetContact = await Contact.findByIdAndUpdate(
+      req.params.id,
+      { $set: contactFields },
+      { new: true } // if not found then create
+    );
+
+    return res.json(targetContact);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("伺服器錯誤，請稍候再試");
+  }
+});
 
 //@route    DELETE api/contacts/:id
 //@desc     Delete contact
 //@access   Private
-router.delete("/:id", (req, res) => {
-  res.send("Delete contact");
+router.delete("/:id", verifyUserToken, async (req, res) => {
+  try {
+    let targetContact = await Contact.findById(req.params.id);
+
+    if (!targetContact) {
+      return res.status(404).json({ msg: "此ID沒有對應到的聯絡人項目" });
+    }
+
+    if (targetContact.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "沒有權限更改此聯絡人" });
+    }
+
+    await Contact.findByIdAndRemove(req.params.id);
+
+    return res.json({ msg: "聯絡人已被刪除" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("伺服器錯誤，請稍候再試");
+  }
 });
 
 module.exports = router;
