@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const config = require("config");
+const verifyUserToken = require("../middleware/auth");
 const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 
@@ -10,9 +11,14 @@ const User = require("../models/User");
 //@route    GET api/auth
 //@desc     Get logged in user
 //@access   Private
-router.get("/", (req, res) => {
-  //TODO: use middleware to get the id of the user
-  res.send("get logged user");
+router.get("/", verifyUserToken, async (req, res) => {
+  try {
+    const loggedInUser = await User.findById(req.user.id).select("-password");
+    res.json(loggedInUser);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("伺服器錯誤");
+  }
 });
 
 //@route    POST api/auth
