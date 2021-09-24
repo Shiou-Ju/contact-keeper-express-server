@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import uuid from "uuid";
+import * as uuid from "uuid";
 import ContactContext from "./contactContext";
 import contactReducer from "./contactReducer";
 import {
@@ -24,6 +24,11 @@ const ContactState = (props) => {
   const [state, dispatch] = useReducer(contactReducer, initialState);
 
   // add contact
+  const addContact = (contact) => {
+    contact.id = uuid.v4();
+    dispatch({ type: ADD_CONTACT, payload: contact });
+  };
+
   // delete contact
   // update contact
   // filter contacts
@@ -36,6 +41,7 @@ const ContactState = (props) => {
       // anything to be accessed from other component
       value={{
         contacts: state.contacts,
+        addContact,
       }}
     >
       {props.children}
