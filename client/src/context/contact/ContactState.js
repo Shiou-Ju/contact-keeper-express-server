@@ -19,6 +19,7 @@ const ContactState = (props) => {
       { id: 2, name: "22", email: "22@22.com", phone: "22222", type: "個人" },
       { id: 3, name: "33", email: "33@33.com", phone: "33333", type: "工作" },
     ],
+    current: null,
   };
 
   const [state, dispatch] = useReducer(contactReducer, initialState);
@@ -38,15 +39,26 @@ const ContactState = (props) => {
   // filter contacts
   // clear filter
   // set current contact
+  const setCurrent = (contact) => {
+    dispatch({ type: SET_CURRENT, payload: contact });
+  };
+
   // clear current contact
+  const clearCurrent = () => {
+    dispatch({ type: CLEAR_CURRENT });
+  };
+
 
   return (
     <ContactContext.Provider
       // anything to be accessed from other component
       value={{
         contacts: state.contacts,
+        current:  state.current,
         addContact,
         deleteContact,
+        setCurrent,
+        clearCurrent,
       }}
     >
       {props.children}
