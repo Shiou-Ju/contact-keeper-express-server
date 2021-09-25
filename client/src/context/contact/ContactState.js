@@ -36,6 +36,10 @@ const ContactState = (props) => {
   };
 
   // update contact
+  const updateContact = (contact) => {
+    dispatch({ type: UPDATE_CONTACT, payload: contact });
+  };
+
   // filter contacts
   // clear filter
   // set current contact
@@ -54,11 +58,12 @@ const ContactState = (props) => {
       // anything to be accessed from other component
       value={{
         contacts: state.contacts,
-        current:  state.current,
+        current: state.current,
         addContact,
         deleteContact,
         setCurrent,
         clearCurrent,
+        updateContact,
       }}
     >
       {props.children}

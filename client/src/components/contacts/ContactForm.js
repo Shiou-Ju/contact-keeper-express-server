@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import ContactContext from "../../context/contact/contactContext";
 
 export const ContactForm = () => {
   // method of adding contact is needed
   const contactContext = useContext(ContactContext);
+  const { addContact, updateContact, clearCurrent, current } = contactContext;
 
   const defaultContact = {
     name: "",
@@ -11,6 +12,18 @@ export const ContactForm = () => {
     phone: "",
     type: "個人",
   };
+
+  useEffect(
+    () => {
+      if (current !== null) {
+        setContact(current);
+      } else {
+        setContact(defaultContact);
+      }
+    },
+    // add dependency here: only contactContext, current changes will lead to the effect
+    [contactContext, current]
+  );
 
   // set all contact info into single object
   const [contact, setContact] = useState(defaultContact);
@@ -22,13 +35,21 @@ export const ContactForm = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    contactContext.addContact(contact);
-    setContact(defaultContact);
+    if  (current  ===  null)  {
+      addContact(contact);
+    } else{
+      updateContact(contact)
+    }
+    clearCurrent();
+  };
+
+  const clearAll = () => {
+    clearCurrent();
   };
 
   return (
     <form onSubmit={onSubmit}>
-      <h2 className="text-primary">新增聯絡人</h2>
+      <h2 className="text-primary">{current ? "變更內容" : "新增聯絡人"}</h2>
       <input
         type="text"
         placeholder="姓名"
@@ -70,10 +91,17 @@ export const ContactForm = () => {
       <div>
         <input
           type="submit"
-          value="新增"
+          value={current ? "變更" : "新增"}
           className="btn btn-primary btn-block"
         />
       </div>
+      {current && (
+        <div>
+          <button className="btn btn-light btn-block" onClick={clearAll}>
+            清除
+          </button>
+        </div>
+      )}
     </form>
   );
 };
