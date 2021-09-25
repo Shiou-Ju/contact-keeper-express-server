@@ -6,13 +6,21 @@ export const Contacts = () => {
   // bring in all states and methods associate with contact context
   const contactContext = useContext(ContactContext);
 
-  const { contacts } = contactContext;
+  const { contacts, filtered } = contactContext;
+
+  if (contacts.length === 0) {
+    return <h4>暫無聯絡人</h4>;
+  }
+
+  const displayItems = (contact) => {
+    return <ContactItem key={contact.id} contact={contact} />;
+  };
 
   return (
     <Fragment>
-      {contacts.map((contact) => (
-        <ContactItem key={contact.id} contact={contact} />
-      ))}
+      {filtered !== null
+        ? filtered.map((contact) => displayItems(contact))
+        : contacts.map((contact) => displayItems(contact))}
     </Fragment>
   );
 };
