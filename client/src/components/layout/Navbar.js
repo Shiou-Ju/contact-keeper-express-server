@@ -15,6 +15,12 @@ const Navbar = ({ title, icon }) => {
         <li>
           <Link to="/about">關於</Link>
         </li>
+        <li>
+          <Link to="/register">註冊</Link>
+        </li>
+        <li>
+          <Link to="/login">登入</Link>
+        </li>
       </ul>
     </div>
   );
