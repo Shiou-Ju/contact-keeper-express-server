@@ -39,7 +39,9 @@ const AuthState = (props) => {
         error: state.error,
         loading: state.loading,
       }}
-    ></AuthContext.Provider>
+    >
+      {props.children}
+    </AuthContext.Provider>
   );
 };
 
