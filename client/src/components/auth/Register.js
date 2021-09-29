@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import AlertContext from "../../context/alert/alertContext";
 
 export const Register = () => {
+  const alertContext = useContext(AlertContext);
+
+  const { setAlert } = alertContext;
+
   // create defaultUser
   const defaultUser = {
     name: "",
@@ -20,7 +25,13 @@ export const Register = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(`註冊已提交`);
+    if (name === "" || email === "" || password === "" || password2 === "") {
+      setAlert("所有項目為必填", "danger");
+    } else if (password !== password2) {
+      setAlert("確認密碼不相符", "danger");
+    } else {
+      console.log(`註冊已提交`);
+    }
   };
 
   return (
@@ -44,6 +55,7 @@ export const Register = () => {
             name="password"
             value={password}
             onChange={onChange}
+            minLength="6"
           />
         </div>
         <div className="form-group">
@@ -53,6 +65,7 @@ export const Register = () => {
             name="password2"
             value={password2}
             onChange={onChange}
+            minLength="6"
           />
         </div>
         <input
