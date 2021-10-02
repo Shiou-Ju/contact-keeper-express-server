@@ -1,6 +1,29 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import AuthContext from "../../context/auth/authContext";
+import AlertContext from "../../context/alert/alertContext";
 
-export const Login = () => {
+export const Login = (props) => {
+  const alertContext = useContext(AlertContext);
+  const authContext = useContext(AuthContext);
+
+  const { setAlert } = alertContext;
+  const { login, error, clearErrors, isAuthenticated } = authContext;
+
+  let errorMsg = null;
+  if (error) errorMsg = error.data.msg;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      props.history.push("/");
+    }
+
+    if (errorMsg === "無效的資訊") {
+      setAlert(errorMsg, "danger");
+      clearErrors();
+    }
+    // eslint-disable-next-line
+  }, [errorMsg, isAuthenticated, authContext.user, props.history]);
+
   // create defaultUser
   const defaultUser = {
     email: "",
@@ -18,7 +41,15 @@ export const Login = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(`登入已提交`);
+    if (email === "" || password === "") {
+      setAlert("所有項目為必填", "danger");
+    } else {
+      const formData = {
+        email,
+        password,
+      };
+      login(formData);
+    }
   };
 
   return (

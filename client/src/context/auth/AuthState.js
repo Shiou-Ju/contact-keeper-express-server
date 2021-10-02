@@ -46,7 +46,6 @@ const AuthState = (props) => {
         "Content-Type": "application/json",
       },
     };
-    console.log(formData);
     try {
       const url = `/api/users`;
       const res = await axios.post(url, formData, config);
@@ -68,7 +67,32 @@ const AuthState = (props) => {
   };
 
   // Login
-  const login = () => {};
+  const login = async (formData) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const url = `/api/auth`;
+      const res = await axios.post(url, formData, config);
+
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data,
+      });
+
+      loadUser();
+    } catch (error) {
+      console.log(error);
+      // 40x will be caught here
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: error.response,
+      });
+    }
+  };
 
   // Logout
   const logout = () => {};
