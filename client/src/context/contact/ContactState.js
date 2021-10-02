@@ -51,6 +51,11 @@ const ContactState = (props) => {
     }
   };
 
+  // clear contacts
+  const clearContacts = async () => {
+    dispatch({ type: CLEAR_CONTACTS });
+  };
+
   // delete contact
   const deleteContact = (id) => {
     dispatch({ type: DELETE_CONTACT, payload: id });
@@ -97,6 +102,7 @@ const ContactState = (props) => {
         filterContacts,
         clearFilter,
         getContacts,
+        clearContacts,
       }}
     >
       {props.children}
