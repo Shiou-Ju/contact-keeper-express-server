@@ -23,9 +23,14 @@ const contactReducer = (state, action) => {
     case UPDATE_CONTACT:
       return {
         ...state,
-        contacts: state.contacts.map((contact) =>
-          contact.id === action.payload.id ? action.payload : contact
-        ),
+        contacts: state.contacts.map((contact) => {
+          const id = contact.id ? contact.id : contact._id;
+          const payloadId = action.payload.id
+            ? action.payload.id
+            : action.payload._id;
+          const result = id === payloadId ? action.payload : contact;
+          return result;
+        }),
         loading: false,
       };
     case DELETE_CONTACT:
