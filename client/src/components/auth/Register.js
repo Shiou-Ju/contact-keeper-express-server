@@ -2,20 +2,26 @@ import React, { useContext, useState, useEffect } from "react";
 import AlertContext from "../../context/alert/alertContext";
 import AuthContext from "../../context/auth/authContext";
 
-export const Register = () => {
+export const Register = (props) => {
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
 
   const { setAlert } = alertContext;
-  const { register, error, clearErrors } = authContext;
+  const { register, error, clearErrors, isAuthenticated } = authContext;
   let errorMsg = null;
-  if (error) errorMsg = error.data.msg;;
+  if (error) errorMsg = error.data.msg;
+
   useEffect(() => {
+    if (isAuthenticated) {
+      props.history.push("/");
+    }
+
     if (errorMsg === "用戶已存在") {
       setAlert(errorMsg, "danger");
       clearErrors();
     }
-  }, [errorMsg]);
+    // eslint-disable-next-line
+  }, [errorMsg, isAuthenticated, authContext.user, props.history]);
 
   // create defaultUser
   const defaultUser = {
