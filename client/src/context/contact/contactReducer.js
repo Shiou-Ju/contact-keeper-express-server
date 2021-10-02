@@ -17,7 +17,7 @@ const contactReducer = (state, action) => {
       return {
         ...state,
         // state are immutable, so use spread operator to pull the data out
-        contacts: [...state.contacts, action.payload],
+        contacts: [action.payload, ...state.contacts],
         loading: false,
       };
     case UPDATE_CONTACT:
@@ -31,9 +31,10 @@ const contactReducer = (state, action) => {
     case DELETE_CONTACT:
       return {
         ...state,
-        contacts: state.contacts.filter(
-          (contact) => contact.id !== action.payload
-        ),
+        contacts: state.contacts.filter((contact) => {
+          const id = contact.id ? contact.id : contact._id;
+          return id !== action.payload;
+        }),
         loading: false,
       };
     case SET_CURRENT:
