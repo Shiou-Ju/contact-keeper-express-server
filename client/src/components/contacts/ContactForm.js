@@ -22,6 +22,7 @@ export const ContactForm = () => {
       }
     },
     // add dependency here: only contactContext, current changes will lead to the effect
+    // eslint-disable-next-line
     [contactContext, current]
   );
 

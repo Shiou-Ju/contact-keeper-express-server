@@ -9,7 +9,7 @@ import {
   CLEAR_ERRORS,
 } from "../types";
 
-export default (state, action) => {
+const authReducer = (state, action) => {
   switch (action.type) {
     case REGISTER_SUCCESS:
       // put token in the local storage
@@ -35,7 +35,25 @@ export default (state, action) => {
         ...state,
         error: null,
       };
+    case USER_LOADED:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        user: action.payload,
+      };
+    case AUTH_ERROR:
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false,
+        user: null,
+        error: action.payload,
+      };
     default:
       return state;
   }
 };
+
+export default authReducer;
