@@ -7,6 +7,7 @@ import {
   FILTER_CONTACTS,
   CLEAR_FILTER,
   CONTACT_ERROR,
+  GET_CONTACTS,
 } from "../types";
 
 const contactReducer = (state, action) => {
@@ -16,6 +17,7 @@ const contactReducer = (state, action) => {
         ...state,
         // state are immutable, so use spread operator to pull the data out
         contacts: [...state.contacts, action.payload],
+        loading: false,
       };
     case UPDATE_CONTACT:
       return {
@@ -23,6 +25,7 @@ const contactReducer = (state, action) => {
         contacts: state.contacts.map((contact) =>
           contact.id === action.payload.id ? action.payload : contact
         ),
+        loading: false,
       };
     case DELETE_CONTACT:
       return {
@@ -30,6 +33,7 @@ const contactReducer = (state, action) => {
         contacts: state.contacts.filter(
           (contact) => contact.id !== action.payload
         ),
+        loading: false,
       };
     case SET_CURRENT:
       return {
@@ -58,6 +62,13 @@ const contactReducer = (state, action) => {
       return {
         ...state,
         error: action.payload,
+        loading: false,
+      };
+    case GET_CONTACTS:
+      return {
+        ...state,
+        contacts: action.payload,
+        loading: false,
       };
     default:
       return state;
