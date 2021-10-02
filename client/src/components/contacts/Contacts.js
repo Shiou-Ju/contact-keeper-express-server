@@ -15,7 +15,11 @@ export const Contacts = () => {
 
   const displayItems = (contact) => {
     return (
-      <CSSTransition key={contact.id} timeout={700} classNames="item">
+      <CSSTransition
+        key={contact.id ? contact.id : contact._id}
+        timeout={700}
+        classNames="item"
+      >
         <ContactItem contact={contact} />
       </CSSTransition>
     );
