@@ -4,7 +4,8 @@ import ContactContext from "../../context/contact/contactContext";
 export const ContactForm = () => {
   // method of adding contact is needed
   const contactContext = useContext(ContactContext);
-  const { addContact, updateContact, clearCurrent, current } = contactContext;
+  const { addContact, updateContact, clearCurrent, current, clearFilter } =
+    contactContext;
 
   const defaultContact = {
     name: "",
@@ -42,6 +43,7 @@ export const ContactForm = () => {
       updateContact(contact)
     }
     clearCurrent();
+    clearFilter();
   };
 
   const clearAll = () => {
