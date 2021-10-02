@@ -1,10 +1,21 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import AlertContext from "../../context/alert/alertContext";
+import AuthContext from "../../context/auth/authContext";
 
 export const Register = () => {
   const alertContext = useContext(AlertContext);
+  const authContext = useContext(AuthContext);
 
   const { setAlert } = alertContext;
+  const { register, error, clearErrors } = authContext;
+  let errorMsg = null;
+  if (error) errorMsg = error.data.msg;;
+  useEffect(() => {
+    if (errorMsg === "用戶已存在") {
+      setAlert(errorMsg, "danger");
+      clearErrors();
+    }
+  }, [errorMsg]);
 
   // create defaultUser
   const defaultUser = {
@@ -30,7 +41,12 @@ export const Register = () => {
     } else if (password !== password2) {
       setAlert("確認密碼不相符", "danger");
     } else {
-      console.log(`註冊已提交`);
+      const formData = {
+        name,
+        email,
+        password,
+      };
+      register(formData);
     }
   };
 
