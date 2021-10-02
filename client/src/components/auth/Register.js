@@ -8,6 +8,7 @@ export const Register = (props) => {
 
   const { setAlert } = alertContext;
   const { register, error, clearErrors, isAuthenticated } = authContext;
+
   let errorMsg = null;
   if (error) errorMsg = error.data.msg;
 
